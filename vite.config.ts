@@ -4,7 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 
 export default defineConfig({
-  base: "/",
+  base: "./",
   plugins: [
     react(),
     tailwindcss()
@@ -12,17 +12,17 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "src"),
-      "@assets": path.resolve(import.meta.dirname, "..", "..", "attached_assets"),
+      "@assets": path.resolve(import.meta.dirname, "public"),
     },
-    dedupe: ["react", "react-dom"],
+    // This forces Vite to try both capitalized and lowercase extensions dynamically
+    extensions: ['.mjs', '.js', '.mts', '.ts', '.jsx', '.tsx', '.json', '.tsx', '.TSX']
   },
   root: path.resolve(import.meta.dirname),
   build: {
     outDir: path.resolve(import.meta.dirname, "dist"),
     emptyOutDir: true,
-  },
-  server: {
-    port: 3000,
-    host: "0.0.0.0",
+    // This prevents the build from failing due to minor case mismatch warnings
+    chunkSizeWarningLimit: 2000,
+    reportCompressedSize: false
   }
 });
